@@ -7,9 +7,7 @@ const userSchema = new Schema({
   role: {
     type: String,
     enum : ["BOSS", "DEVELOPER", "TA"]
-  },
-  age: Number,
-  extraInfo: String
+  }
 }, {
   timestamps: true
 });

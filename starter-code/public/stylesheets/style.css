@@ -37,6 +37,6 @@ table {
 
 /***********************main-css**************************/
 
-.role {
-  text-transform: lowercase;
+.updatePasswordUserName {
+  display: none;
 }

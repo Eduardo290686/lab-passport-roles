@@ -9,7 +9,7 @@ function checkRoles(roles) {
         res.redirect("/login");
       }
     }
-  };
-}
+  }
+};
 
 module.exports = checkRoles;

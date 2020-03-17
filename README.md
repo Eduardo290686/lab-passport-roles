@@ -81,7 +81,7 @@ TA's will have the responsibility of course creation, so we will have to create 
 
 ## Iteration #4: Alumni
 
-Now that our platform is 100% restored, it's time to let other people come in. We are going to give the opportunity to the alumni to access our platform by using they facebook profile.
+Now that our platform is 100% restored, it's time to let other people come in. We are going to give the opportunity to the alumni to access our platform by using their facebook profile.
 
 When alumni access the platform with their facebook profile, we should store their data in the database with "Student" role.
 

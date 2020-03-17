@@ -1,7 +1,13 @@
+<p>Welcome {{user.username}}</p>
+
 <ul>
   {{#each users}}
-  <li><b>Name: </b><a href="/userDetail/{{id}}">{{username}}</a></li>
+  <p>Name: </p><a href="/userDetail/{{id}}">{{username}}</a>
+  <p>Role: {{role}}</p>
   {{/each}}
 </ul>
-<a href="/logout"><button>Logout</button></a>
+
+<a href="/logout"><button>Log out</button></a>
+{{#ifEqual user.role "BOSS"}}
 <a href="/create"><button>Add new user</button></a>
+{{/ifEqual}}
