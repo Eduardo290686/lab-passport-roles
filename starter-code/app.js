@@ -8,8 +8,6 @@ dentro de una ruta post. */
 /* Para ello, necesitaremos habilitar body-parser.json() y 
 body-parser.urlencoded(). */
 const bodyParser = require('body-parser');
-/* Cookie-parser nos permite utilizar cookies. */
-const cookieParser = require('cookie-parser');
 // Aquí, requerimos el framework Express.
 const express = require('express');
 // Handlebars (hbs) será nuestro motor de renderizado de plantillas.
@@ -39,7 +37,8 @@ const flash = require("connect-flash");
 con la base de datos. */
 const User = require("./models/user");
 
-
+/* Mongoose.connect nos permite establecer la conexión con nuestra base
+de datos. */
 mongoose
   .connect('mongodb://localhost/passportRoles', { useNewUrlParser: true })
   .then(x => {
@@ -49,10 +48,16 @@ mongoose
     console.error('Error connecting to mongo', err)
   });
 
-
+/* A continuación, guardamos en app la ejecución de la función express().
+Esto nos permite ejecutar nuestro servidor en la constante app. */ 
 const app = express();
 
-
+/* Ahora vamos a registrar dos helpers de Handlebars.
+Un helper es una función de Javascript que podemos llamar desde las
+plantillas. En este caso, vamos a registrar uno llamado ifEqual, que
+nos permitirá hacer comparaciones de igualdad con los argumentos que
+le pasemos, y otro con el nombre inNotEqual, el cual hará comparaciones
+de desigualdad. */
 hbs.registerHelper('ifEqual', function (option1, option2, options) {
   if (option1 === option2) {
     return options.fn(this);
@@ -67,17 +72,26 @@ hbs.registerHelper('ifNotEqual', function (option1, option2, options) {
   return options.inverse(this);
 });
 
-
+// Configuración de express-session.
 app.use(session({
   secret: "our-passport-local-strategy-app",
   resave: true,
   saveUninitialized: true
 }));
 
+/* Passport.serializeUser nos permite utilizar cookies para guardar
+información acerca de la sesión. */
+/* Una cookie (galleta o galleta informática) es una pequeña 
+información enviada por un sitio web y almacenada en el navegador 
+del usuario, de manera que el sitio web puede consultar la actividad 
+previa del navegador. */
+// La información queda almacenada en req.session.passport.user.
 passport.serializeUser((user, cb) => {
   cb(null, user._id);
 });
 
+/* Passport.deserializeUser permite recuperar la información
+almacenada en la cookie. */
 passport.deserializeUser((id, cb) => {
   User.findById(id, (err, user) => {
     if (err) { return cb(err); }
@@ -85,6 +99,9 @@ passport.deserializeUser((id, cb) => {
   });
 });
 
+/* Configuramos la estrategia de Passport que vamos a utilizar.
+En este caso, se trata de LocalStrategy la cual, nos permite
+trabajar con una autenticación del tipo usuario-contraseña. */
 passport.use(new LocalStrategy({
   passReqToCallback: true
 }, (req, username, password, next) => {
@@ -103,19 +120,18 @@ passport.use(new LocalStrategy({
   });
 }));
 
+// Habilitamos la utilización de los middelware que vamos a emplear.
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// Definimos las rutas que vamos a emplear.
 const index = require('./routes/index');
 app.use('/', index);
 const passportRouter = require("./routes/passportRouter");
@@ -123,5 +139,5 @@ app.use('/', passportRouter);
 const private = require("./routes/private");
 app.use('/', private);
 
-
+// Exportación del archivo.
 module.exports = app;

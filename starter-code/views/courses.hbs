@@ -1,0 +1,11 @@
+<p>Welcome {{user.username}}</p>
+
+<ul>
+  {{#each courses}}
+  <p>Name: </p><a href="/courseDetail/{{_id}}">{{courseName}}</a>
+  {{/each}}
+</ul>
+
+{{#ifEqual user.role "TA"}}
+<a href="/createCourse"><button>Add new course</button></a>
+{{/ifEqual}}

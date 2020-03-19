@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ensureLogin = require("connect-ensure-login");
 const User = require("../models/user");
+const Course = require("../models/course");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const roles = require("../modules/roles");
@@ -12,20 +13,46 @@ const bcryptSalt = 10;
 const checkBoss = roles(["BOSS"]);
 const checkDeveloper = roles(["DEVELOPER"]);
 const checkTA = roles(["TA"]);
+const checkAlumni = roles(["ALUMNI"]);
 
-/****************All users routes************/
+/*********** Rutas comunes a todos los usuarios. ************/
 
-router.get("/list", ensureLogin.ensureLoggedIn("/login"),
+router.get("/home", ensureLogin.ensureLoggedIn("/login"),
+  (req, res, next) => {
+    res.render("home");
+  })
+
+router.get("/users", ensureLogin.ensureLoggedIn("/login"),
   (req, res, next) => {
     User
       .find().
       then(users => {
         let user = req.user;
-        res.render("list", {
+        res.render("users", {
           users, user
         })
       })
   });
+
+router.get("/courses", ensureLogin.ensureLoggedIn("/login"),
+  (req, res, next) => {
+    let user = req.user;
+    Course
+      .find()
+      .then((courses) => {
+        res.render("courses", { user, courses })
+      })
+  })
+
+router.get("/courseDetail/:id", ensureLogin.ensureLoggedIn("/login"),
+  (req, res, next) => {
+    let user = req.user;
+    let courseId = req.params.id;
+    Course.findById(courseId)
+      .then((course) => {
+        res.render("courseDetail", { course, user });
+      })
+  })
 
 router.get("/logout", ensureLogin.ensureLoggedIn("/login"),
   (req, res, next) => {
@@ -63,7 +90,6 @@ router.post("/updatePassword", ensureLogin.ensureLoggedIn("/login"),
 
 router.get("/newPassword", ensureLogin.ensureLoggedIn("/login"),
   (req, res, next) => {
-    console.log(req.user);
     res.render("newPassword");
   })
 
@@ -83,17 +109,18 @@ router.post("/newPassword", ensureLogin.ensureLoggedIn("login"),
     const hashPass = bcrypt.hashSync(password, salt);
 
     User.updateOne({ username: name }, { password: hashPass })
-      .then(console.log('updated'));
-    res.redirect("/list");
+      .then((newUser) => {
+        res.redirect("/users");
+      });
   })
 
-/**************Specific boss routes*******************/
+/************** Rutas específicas del jefe. *******************/
 
-router.get("/create", checkBoss, (req, res) => {
-  res.render("create");
+router.get("/createUser", checkBoss, (req, res) => {
+  res.render("createUser");
 })
 
-router.post("/create", checkBoss, (req, res) => {
+router.post("/createUser", checkBoss, (req, res) => {
   const pass = req.body.password;
   if (req.body.username.length > 0 && pass.length > 0) {
     const salt = bcrypt.genSaltSync(bcryptSalt);
@@ -102,7 +129,6 @@ router.post("/create", checkBoss, (req, res) => {
       username: req.body.username
     })
       .then((users) => {
-        console.log(users);
         if (users.length === 0) {
           User.create({
             username: req.body.username,
@@ -110,16 +136,16 @@ router.post("/create", checkBoss, (req, res) => {
             role: req.body.role
           })
             .then(newUser => {
-              res.redirect("/list");
+              res.redirect("/users");
             })
         } else {
-          res.render("create", {
+          res.render("createUser", {
             message: "The username already exists",
           });
         }
       })
   } else {
-    res.render("create", {
+    res.render("createUser", {
       message: "You must fill both user name and password fields!"
     });
   }
@@ -129,9 +155,74 @@ router.get("/deleteUser/:id", checkBoss, (req, res, next) => {
   let id = req.params.id;
   User.findByIdAndDelete(id)
     .then(user => {
-      res.redirect("/list")
+      res.redirect("/users")
     })
 });
 
+/********************** Rutas de los TA's. *************************/
 
+router.get("/createCourse", checkTA, (req, res, next) => {
+  res.render("createCourse");
+})
+
+router.post("/createCourse", checkTA, (req, res, next) => {
+  let name = req.body.courseName;
+  let description = req.body.description;
+  Course.find({ courseName: name })
+    .then((courses) => {
+      if (courses.length === 0) {
+        if (name.length === 0) {
+          res.render("createCourse",
+            { message: "Introduce a name for the course" });
+        } else if (description.length === 0) {
+          res.render("createCourse",
+            { message: "Introduce a description for the course" });
+        } else {
+          Course.create({
+            courseName: name,
+            courseDescription: description
+          })
+          Course.find()
+            .then((courses) => {
+              res.redirect("/courses")
+            })
+        }
+      }
+      else {
+        res.render("createCourse", { message: "This course already exists" });
+      }
+    })
+})
+
+router.get("/updateCourse/:id", checkTA, (req, res, next) => {
+  let id = req.params.id;
+  Course.findById(id)
+    .then((course) => {
+      console.log(course);
+      res.render("updateCourse", { course });
+    })
+})
+
+router.post("/updateCourse/:id", checkTA, (req, res, next) => {
+  let user = req.user;
+  let id = req.params.id;
+  let name = req.body.name;
+  let description = req.body.description;
+  Course.updateOne({ _id: id }, { courseName: name, courseDescription: description })
+    .then((course) => { });
+  Course.findById(id)
+    .then((course) => {
+      res.render("courseDetail", { course, user });
+    })
+})
+
+router.get("/deleteCourse/:id", checkTA, (req, res, next) => {
+  let id = req.params.id;
+  Course.findByIdAndDelete(id)
+  .then((course) => {
+    res.redirect("/courses");
+  })
+})
+
+// Exportación del documento.
 module.exports = router;
