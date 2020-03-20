@@ -1,51 +1,62 @@
-<p>Welcome {{user.username}}</p>
+<div class="button-container">
 
-<ul>
-  {{#ifNotEqual user.role "ALUMNI"}}
-  {{#each users}}
-  {{#ifEqual role "BOSS"}}
-  <p>Name: </p><a href="/userDetail/{{id}}">{{username}}</a>
-  <p>Role: {{role}}</p>
+  <a href="/logout"><button>Log out</button></a>
+
+  {{#ifEqual user.role "BOSS"}}
+  <a href="/createUser"><button>Add new user</button></a>
   {{/ifEqual}}
-  {{/each}}
-  {{/ifNotEqual}}
-</ul>
 
-<ul>
-  {{#ifNotEqual user.role "ALUMNI"}}
-  {{#each users}}
-  {{#ifEqual role "TA"}}
-  <p>Name: </p><a href="/userDetail/{{id}}">{{username}}</a>
-  <p>Role: {{role}}</p>
-  {{/ifEqual}}
-  {{/each}}
-  {{/ifNotEqual}}
-</ul>
+</div>
 
-<ul>
-  {{#ifNotEqual user.role "ALUMNI"}}
-  {{#each users}}
-  {{#ifEqual role "DEVELOPER"}}
-  <p>Name: </p><a href="/userDetail/{{id}}">{{username}}</a>
-  <p>Role: {{role}}</p>
-  {{/ifEqual}}
-  {{/each}}
-  {{/ifNotEqual}}
-</ul>
+<div class="list-container">
+  <table>
 
-<ul>
-  {{#each users}}
-  {{#ifEqual role "ALUMNI"}}
-  <p>Name: </p><a href="/userDetail/{{id}}">{{username}}</a>
-  <p>Role: {{role}}</p>
-  {{/ifEqual}}
-  {{/each}}
-</ul>
+    <caption>
+      <h2 class="list-title">Users:</h2>
+    </caption>
 
-<a href="/logout"><button>Log out</button></a>
-{{#ifEqual user.role "BOSS"}}
-<a href="/createUser"><button>Add new user</button></a>
-{{/ifEqual}}
-{{#ifEqual user.role "TA"}}
-<a href="/createCourse"><button>Add new course</button></a>
-{{/ifEqual}}
+    {{#ifNotEqual user.role "ALUMNI"}}
+    {{#each users}}
+    {{#ifEqual role "BOSS"}}
+    <tr>
+      <td>Name: <a href="/userDetail/{{id}}" class="paragraph-link">{{username}}</a></td>
+      <td><span>Role: {{role}}</span></td>
+    </tr>
+    {{/ifEqual}}
+    {{/each}}
+    {{/ifNotEqual}}
+
+    {{#ifNotEqual user.role "ALUMNI"}}
+    {{#each users}}
+    {{#ifEqual role "TA"}}
+    <tr>
+      <td>Name: <a href="/userDetail/{{id}}" class="paragraph-link">{{username}}</a></td>
+      <td><span>Role: {{role}}</span></td>
+    </tr>
+    {{/ifEqual}}
+    {{/each}}
+    {{/ifNotEqual}}
+
+    {{#ifNotEqual user.role "ALUMNI"}}
+    {{#each users}}
+    {{#ifEqual role "DEVELOPER"}}
+    <tr>
+      <td>Name: <a href="/userDetail/{{id}}" class="paragraph-link">{{username}}</a></td>
+      <td><span>Role: {{role}}</span></td>
+    </tr>
+    {{/ifEqual}}
+    {{/each}}
+    {{/ifNotEqual}}
+
+    {{#each users}}
+    {{#ifEqual role "ALUMNI"}}
+    <tr>
+      <td>Name: <a href="/userDetail/{{id}}" class="paragraph-link">{{username}}</a></td>
+      <td><span>Role: {{role}}</span></td>
+    </tr>
+    {{/ifEqual}}
+    {{/each}}
+
+  </table>
+
+</div>

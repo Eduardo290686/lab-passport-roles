@@ -1,11 +1,29 @@
-<p>Welcome {{user.username}}</p>
+<div class="button-container">
 
-<ul>
-  {{#each courses}}
-  <p>Name: </p><a href="/courseDetail/{{_id}}">{{courseName}}</a>
-  {{/each}}
-</ul>
+  <a href="/logout"><button>Log out</button></a>
 
-{{#ifEqual user.role "TA"}}
-<a href="/createCourse"><button>Add new course</button></a>
-{{/ifEqual}}
+  {{#ifEqual user.role "TA"}}
+  <a href="/createCourse"><button>Add new course</button></a>
+  {{/ifEqual}}
+
+</div>
+
+<div class="list-container">
+
+  <table>
+
+    <caption>
+      <h2 class="list-title">Courses</h2>
+    </caption>
+
+    {{#each courses}}
+    <tr>
+      <td>
+        <p><a href="/courseDetail/{{_id}}" class="paragraph-link">{{courseName}}</a></p>
+      </td>
+    </tr>
+    {{/each}}
+
+  </table>
+
+</div>
