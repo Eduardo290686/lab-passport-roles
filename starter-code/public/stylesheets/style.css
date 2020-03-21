@@ -109,6 +109,12 @@ input {
   margin-top: 2.5vh;
 }
 
+select {
+  font-size: 1.6rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 3.5vh;
+}
+
 /********** Pantalla de selección de usuarios o cursos. *************/
 
 #users-courses-container {
@@ -160,6 +166,25 @@ td {
   justify-content: space-around;
   margin-top: 5vh;
 }
+
+/****************** Detalles del usuario o curso. *********************/
+
+#detail {
+  margin-top: 4rem;
+  margin-left: 5rem;
+}
+
+#detail h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+#detail p {
+  font-size: 1.6rem;
+  line-height: 3rem;
+}
+
+/********************** Cambio de contraseña. ***********************/
 
 .updatePasswordUserName {
   display: none;

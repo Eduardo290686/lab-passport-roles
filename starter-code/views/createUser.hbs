@@ -1,15 +1,33 @@
-<form action="/createUser" method="POST">
-  <input type="text" name="username" value="">
-  <input type="password" name="password" value="">
-  <select name="role">
-    <option value="BOSS">BOSS</option>
-    <option value="DEVELOPER">DEVELOPER</option>
-    <option value="TA">TA</option>
-    <option value="ALUMNI">ALUMNI</option>
-  </select>
-  <input type="submit" value="Create">
-</form>
-{{#if message}}
-<h2>{{message}}</h2>
-{{/if}}
-<a href="/logout"><button>Logout</button></a>
+<div class="button-container">
+
+  <a href="/logout"><button>Log out</button></a>
+
+</div>
+
+<div class="form-container">
+
+  <form action="/createUser" method="POST">
+
+    <label for="username">User name:</label>
+    <input type="text" name="username" value="">
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" value="">
+
+    <label for="role">Role:</label>
+    <select name="role">
+      <option value="BOSS">BOSS</option>
+      <option value="DEVELOPER">DEVELOPER</option>
+      <option value="TA">TA</option>
+      <option value="ALUMNI">ALUMNI</option>
+    </select>
+
+    <input type="submit" value="Create">
+
+    {{#if message}}
+    <div class="error-message">{{message}}</div>
+    {{/if}}
+
+  </form>
+
+</div>

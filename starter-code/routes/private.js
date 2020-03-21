@@ -208,6 +208,12 @@ router.post("/updateCourse/:id", checkTA, (req, res, next) => {
   let id = req.params.id;
   let name = req.body.name;
   let description = req.body.description;
+  if (name.length === 0 || description.length === 0) {
+    Course.findById(id)
+      .then((course) => {
+        res.render("updateCourse", { course, message: "You have to add name and description"});
+      })
+  }
   Course.updateOne({ _id: id }, { courseName: name, courseDescription: description })
     .then((course) => { });
   Course.findById(id)
@@ -219,9 +225,9 @@ router.post("/updateCourse/:id", checkTA, (req, res, next) => {
 router.get("/deleteCourse/:id", checkTA, (req, res, next) => {
   let id = req.params.id;
   Course.findByIdAndDelete(id)
-  .then((course) => {
-    res.redirect("/courses");
-  })
+    .then((course) => {
+      res.redirect("/courses");
+    })
 })
 
 // Exportación del documento.

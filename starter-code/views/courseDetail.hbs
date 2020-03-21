@@ -1,11 +1,19 @@
-<h1>Course detail</h1>
+<div class="button-container">
 
-<p>Name : {{course.courseName}}</p>
-<p>Description : {{course.courseDescription}}</p>
+  {{#ifEqual user.role "TA"}}
+  <a href="/updateCourse/{{course._id}}">
+    <button>Update course</button></a>
+  <a href="/deleteCourse/{{course._id}}">
+    <button>Delete course</button></a>
+  {{/ifEqual}}
 
-{{#ifEqual user.role "TA"}}
-<a href="/updateCourse/{{course._id}}">
-  <button>Update course</button></a>
-<a href="/deleteCourse/{{course._id}}">
-  <button>Delete course</button></a>
-{{/ifEqual}}
+</div>
+
+<div id="detail">
+
+  <h2>Course detail</h2>
+
+  <p>Name : {{course.courseName}}</p>
+  <p>Description : {{course.courseDescription}}</p>
+
+</div>

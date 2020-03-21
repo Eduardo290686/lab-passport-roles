@@ -1,14 +1,22 @@
-<h1>User detail</h1>
+<div class="button-container">
 
-<p>Name: {{userInfo.username}}</p>
-<p>Role: <span class="role">{{userInfo.role}}</span></p>
+  {{#ifEqual currentUser.username userInfo.username}}
+  <a href="/updatePassword"><button>Update password</button></a>
+  {{/ifEqual}}
 
-{{#ifEqual currentUser.username userInfo.username}}
-<a href="/updatePassword">Update password</a>
-{{/ifEqual}}
+  {{#ifNotEqual currentUser.username userInfo.username}}
+  {{#ifEqual currentUser.role "BOSS"}}
+  <a href="/deleteUser/{{userInfo._id}}"><button>Delete user</button></a>
+  {{/ifEqual}}
+  {{/ifNotEqual}}
 
-{{#ifNotEqual currentUser.username userInfo.username}}
-{{#ifEqual currentUser.role "BOSS"}}
-<a href="/deleteUser/{{userInfo._id}}">Delete user</a>
-{{/ifEqual}}
-{{/ifNotEqual}}
+</div>
+
+<div id="detail">
+
+  <h2>User detail</h2>
+
+  <p>Name: {{userInfo.username}}</p>
+  <p>Role: <span class="role">{{userInfo.role}}</span></p>
+
+</div>

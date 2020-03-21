@@ -1,13 +1,25 @@
-<form action="/updateCourse/{{course._id}}" method="POST">
+<div class="button-container">
 
-  <input type="text" name="name" value="{{course.courseName}}">
+  <a href="/logout"><button>Log out</button></a>
 
-  <input type="text" name="description" value="{{course.courseDescription}}">
+</div>
 
-  <input type="submit" value="Submit">
+<div class="form-container">
 
-  {{#if message}}
-  <div class="error-message">{{ message }}</div>
-  {{/if}}
+  <form action="/updateCourse/{{course._id}}" method="POST">
 
-</form>
+    <label for="name">Course name:</label>
+    <input type="text" name="name" value="{{course.courseName}}">
+
+    <label for="description">Description:</label>
+    <input type="text" name="description" value="{{course.courseDescription}}">
+
+    <input type="submit" value="Submit">
+
+    {{#if message}}
+    <div class="error-message">{{ message }}</div>
+    {{/if}}
+
+  </form>
+
+</div>
